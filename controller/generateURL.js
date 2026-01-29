@@ -1,15 +1,24 @@
 const urlSchema = require('../model/urlSchema')
+const validator = require('validator')
 const {nanoid} = require('nanoid')
+
+const BASE_URL = process.env.BASE_URL || "http://localhost:3000"
 
 async function generateURL(req, res) {
     try {
 
-        url = req.body.url 
+        const url = req.body.url 
         if(!url) {
             return res.status(400).json({"error" : "URL is required"})
         }
+
+        const normalizedUrl = url.startsWith('http') ? url : `http://${url}`;
+
+        if(!validator.isURL(url)) {
+            return res.status(400).json({"error" : "Invalid URL"})
+        }
         
-        id = nanoid(8)
+        const id = nanoid(8)
         
         await urlSchema.create({
             shortID : id,
@@ -17,7 +26,7 @@ async function generateURL(req, res) {
         })
         
         return res.json({
-            "shortID" : id,
+            "shortURL" : `${BASE_URL}/${id}`,
             "RedirectURL" : url,
         })
     }
