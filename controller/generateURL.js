@@ -7,14 +7,14 @@ async function generateURL(req, res) {
         return res.status(400).json({"error" : "URL is required"})
     }
 
-    shortID = nanoid(8)
+    id = nanoid(8)
 
     await urlSchema.create({
-        shortID : shortid,
+        shortID : id,
         redirectURL : url, 
     })
 
-    return res.json({"shortID" : shortID})
+    return res.json({"shortID" : id})
 }
 
 module.exports = {generateURL}
