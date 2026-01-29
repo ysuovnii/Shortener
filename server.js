@@ -1,3 +1,5 @@
+const path = require('path')
+
 //express
 const express = require('express')
 const server = express() 
@@ -14,6 +16,16 @@ server.use(express.urlencoded({ extended: true }));
 //db
 const dbConnection = require('./controller/connection')
 dbConnection.connectDB(MONGO_URL)
+
+//static
+
+//SSR
+server.use(express.static(path.join(__dirname, 'public')));
+server.set('view engine', 'ejs');
+server.set('views', path.join(__dirname, 'views'));
+
+server.get('/', (req, res) => res.render('index', { error: null }));
+
 
 //routes
 const urlRoute = require('./routes/urlRoute')

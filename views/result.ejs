@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Shortened</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>URL Shortened!</h1>
+
+    <p>Original URL: <%= originalUrl %></p>
+    <p class="success">
+        Short URL: 
+        <a class="short-link" href="<%= shortUrl %>" target="_blank"><%= shortUrl %></a>
+        <button class="copy-btn" onclick="copyToClipboard('<%= shortUrl %>')">Copy</button>
+    </p>
+
+    <a href="/">Shorten another URL</a>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy!');
+            });
+        }
+    </script>
+</body>
+</html>
