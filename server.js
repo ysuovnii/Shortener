@@ -17,7 +17,10 @@ server.use(express.urlencoded({ extended: true }));
 const dbConnection = require('./controller/connection')
 dbConnection.connectDB(MONGO_URL)
 
-//static
+//middleware
+const rateLimit = require('./middlewares/rateLimiter')
+server.use(rateLimit)
+
 
 //SSR
 server.use(express.static(path.join(__dirname, 'public')));
@@ -32,6 +35,12 @@ const urlRoute = require('./routes/urlRoute')
 const redirect = require('./controller/Redirect');
 server.use('/url', urlRoute)
 server.get('/:id', redirect.redirectURL) 
+
+//middleware
+const notFound = require('./middlewares/notFound')
+const errorHandler = require('./middlewares/errorHandler')
+server.use(errorHandler)
+server.use(notFound)
 
 //entry 
 server.listen(PORT, () => {
